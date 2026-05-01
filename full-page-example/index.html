@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create New Payer — WellSky</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: var(--wsc-system-typography-body-2-font-size);
+      font-weight: var(--wsc-system-typography-body-2-font-weight);
+      line-height: var(--wsc-system-typography-body-2-line-height);
+      color: var(--wsc-system-on-surface);
+      background: var(--wsc-system-background);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ═══ TOP NAV BAR ═══ */
+    .topnav {
+      height: var(--wcts-topnav-height);
+      background: var(--wsc-system-surface);
+      color: var(--wsc-system-on-surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--wsc-system-spacer-rem-md);
+      position: fixed;
+      top: 22px;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--wsc-system-outline);
+    }
+
+    .topnav-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .topnav-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .topnav-logo svg {
+      height: 20px;
+      width: auto;
+    }
+
+    .topnav-right {
+      display: flex;
+      align-items: center;
+      gap: var(--wsc-system-spacer-rem-2xs);
+    }
+
+    .topnav-links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .topnav-link {
+      padding: 0 var(--wsc-system-spacer-rem-sm);
+      color: var(--wsc-system-on-surface);
+      text-decoration: none;
+      font-size: var(--wsc-system-typography-body-2-font-size);
+      font-weight: var(--wsc-system-typography-body-1-font-weight);
+      cursor: pointer;
+      transition: color var(--wsc-transition-fast);
+      white-space: nowrap;
+      height: var(--wcts-topnav-height);
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+
+    .topnav-link:hover { color: var(--wsc-system-primary); }
+
+    .topnav-link.active {
+      color: var(--wsc-system-primary);
+      border-bottom-color: var(--wsc-system-primary);
+    }
+
+    .topnav-icon-btn {
+      background: none;
+      border: none;
+      color: var(--wsc-system-icon-default);
+      cursor: pointer;
+      padding: var(--wsc-system-spacer-rem-2xs);
+      border-radius: var(--wsc-border-radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--wsc-transition-fast);
+    }
+
+    .topnav-icon-btn:hover { background: var(--wsc-system-surface-container); }
+    .topnav-icon-btn .material-icons { font-size: 22px; }
+
+    /* ═══ APP BODY ═══ */
+    .app-body {
+      display: flex;
+      height: calc(100vh - var(--wcts-topnav-height) - 22px);
+      margin-top: calc(var(--wcts-topnav-height) + 22px);
+    }
+
+    /* ═══ SIDEBAR ═══ */
+    .sidebar {
+      width: var(--wcts-sidebar-width);
+      background: var(--wsc-system-secondary);
+      color: var(--wsc-system-on-secondary);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: width var(--wsc-transition-normal);
+    }
+
+    .sidebar.collapsed { width: var(--wcts-sidebar-collapsed-width); }
+
+    .sidebar-nav {
+      flex: 1;
+      padding-top: var(--wsc-system-spacer-rem-xs);
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: var(--wsc-system-spacer-rem-sm);
+      padding: var(--wsc-system-spacer-rem-sm) var(--wsc-system-spacer-rem-md);
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background var(--wsc-transition-fast);
+      white-space: nowrap;
+    }
+
+    .sidebar-item:hover { background: rgba(255, 255, 255, 0.08); }
+
+    .sidebar-item.active {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--wsc-system-on-secondary);
+      font-weight: var(--wsc-system-typography-body-1-font-weight);
+    }
+
+    .sidebar-item .material-icons { font-size: 20px; opacity: 0.85; flex-shrink: 0; }
+    .sidebar-item-label { font-size: var(--wsc-system-typography-body-2-font-size); }
+
+    .sidebar-collapse {
+      display: flex;
+      align-items: center;
+      gap: var(--wsc-system-spacer-rem-xs);
+      justify-content: flex-end;
+      padding: var(--wsc-system-spacer-rem-sm) var(--wsc-system-spacer-rem-md);
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: var(--wsc-system-typography-caption-font-size);
+      transition: background var(--wsc-transition-fast);
+    }
+
+    .sidebar-collapse:hover { background: rgba(255, 255, 255, 0.08); }
+    .sidebar-collapse .material-icons { font-size: 18px; }
+
+    /* ═══ MAIN CONTENT ═══ */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--wsc-system-surface);
+    }
+
+    .content-area {
+      padding: var(--wcts-content-padding);
+      padding-bottom: 80px;
+    }
+
+    /* ═══ BREADCRUMB ═══ */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: var(--wsc-system-spacer-rem-2xs);
+      margin-bottom: var(--wsc-system-spacer-rem-sm);
+    }
+
+    .breadcrumb a {
+      color: var(--wsc-system-primary);
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .breadcrumb .separator {
+      color: var(--wsc-system-neutral-variant);
+      font-size: 16px;
+    }
+
+    .breadcrumb .current {
+      color: var(--wsc-system-on-surface-variant);
+      font-size: 12px;
+    }
+
+    /* ═══ PAGE HEADER ═══ */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--wsc-system-spacer-rem-lg);
+    }
+
+    .page-title {
+      font-size: var(--wcts-page-title-size);
+      font-weight: var(--wcts-page-title-weight);
+      color: var(--wsc-system-on-primary-container);
+    }
+
+    /* ═══ BUTTONS ═══ */
+    .btn-primary {
+      background: var(--wsc-system-primary);
+      color: var(--wsc-system-on-primary);
+      border: none;
+      padding: var(--wsc-system-spacer-rem-xs) var(--wsc-system-spacer-rem-lg);
+      border-radius: var(--wsc-border-radius-md);
+      font-size: var(--wsc-system-typography-button-font-size);
+      font-weight: var(--wsc-system-typography-button-font-weight);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--wsc-system-spacer-rem-2xs);
+      letter-spacing: 0.3px;
+      transition: background var(--wsc-transition-fast);
+    }
+
+    .btn-primary:hover { background: var(--wsc-system-primary-hover); }
+    .btn-primary:active { background: var(--wsc-system-primary-filled-pressed); }
+    .btn-primary:disabled { background: var(--wsc-system-primary-disabled); color: var(--wsc-system-on-primary-disabled); cursor: not-allowed; }
+
+    .btn-outlined {
+      background: var(--wsc-system-surface);
+      color: var(--wsc-system-primary);
+      border: 1.5px solid var(--wsc-system-primary);
+      padding: var(--wsc-system-spacer-rem-xs) var(--wsc-system-spacer-rem-lg);
+      border-radius: var(--wsc-border-radius-md);
+      font-size: var(--wsc-system-typography-button-font-size);
+      font-weight: var(--wsc-system-typography-button-font-weight);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--wsc-system-spacer-rem-2xs);
+      letter-spacing: 0.3px;
+      transition: background var(--wsc-transition-fast);
+    }
+
+    .btn-outlined:hover { background: var(--wsc-system-primary-container); }
+
+    /* ═══ CARD ═══ */
+    .card {
+      background: var(--wsc-system-surface);
+      border: 1px solid var(--wsc-system-outline);
+      border-radius: var(--wcts-card-border-radius);
+      box-shadow: var(--wcts-card-shadow);
+      margin-bottom: var(--wcts-card-margin-bottom);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--wcts-card-header-padding);
+    }
+
+    .card-title {
+      font-size: var(--wsc-system-typography-headline-4-font-size);
+      font-weight: 500;
+      line-height: var(--wsc-system-typography-headline-4-line-height);
+      color: var(--wsc-system-on-primary-container);
+    }
+
+    .card-body {
+      padding: var(--wcts-card-body-padding);
+    }
+
+    /* ═══ MATERIAL FILL FIELD ═══ */
+    .mat-field {
+      position: relative;
+      background: var(--wsc-system-mat-fill-bg);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+      border-radius: var(--wsc-border-radius-md) var(--wsc-border-radius-md) 0 0;
+      padding: 20px 12px 8px;
+      transition: border-color 0.15s ease;
+    }
+    .mat-field:focus-within {
+      border-bottom: 2px solid var(--wsc-system-primary);
+      padding-bottom: 7px;
+    }
+    .mat-field .form-label {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--wsc-system-neutral-variant);
+      font-weight: 400;
+      margin: 0;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    .mat-field:focus-within .form-label,
+    .mat-field:has(.form-input:not(:placeholder-shown)) .form-label,
+    .mat-field:has(.form-select) .form-label {
+      top: 6px;
+      transform: none;
+      font-size: 12px;
+      color: var(--wsc-system-on-surface-variant);
+    }
+    .mat-field:focus-within .form-label {
+      color: var(--wsc-system-primary);
+    }
+    .mat-field .form-input::placeholder { color: transparent; }
+
+    /* Error state for mat-field */
+    .mat-field.error {
+      border-bottom-color: var(--wsc-system-error);
+    }
+    .mat-field.error:focus-within {
+      border-bottom: 2px solid var(--wsc-system-error);
+    }
+    .mat-field.error .form-label {
+      color: var(--wsc-system-error);
+    }
+    .mat-field.error:focus-within .form-label {
+      color: var(--wsc-system-error);
+    }
+
+    /* ═══ FORM FIELDS ═══ */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--wsc-system-spacer-rem-md) var(--wsc-system-spacer-rem-lg);
+      padding: var(--wsc-system-spacer-rem-xs) 0;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group.span-2 {
+      grid-column: span 2;
+    }
+
+    /* Error message below field */
+    .field-error {
+      color: var(--wsc-system-error);
+      font-size: 12px;
+      margin-top: var(--wsc-system-spacer-rem-2xs);
+      display: none;
+    }
+    .field-error.visible {
+      display: block;
+    }
+
+    /* Help text below page title */
+    .page-help-text {
+      color: var(--wsc-system-on-surface-variant);
+      font-size: var(--wsc-system-typography-body-2-font-size);
+      margin-top: var(--wsc-system-spacer-rem-2xs);
+      margin-bottom: var(--wsc-system-spacer-rem-md);
+    }
+
+    /* Error alert banner */
+    .error-banner {
+      background: var(--wsc-system-error-container);
+      border: 1px solid var(--wsc-system-error);
+      border-radius: var(--wsc-border-radius-md);
+      padding: var(--wsc-system-spacer-rem-md);
+      margin-bottom: var(--wsc-system-spacer-rem-lg);
+      display: none;
+    }
+    .error-banner.visible {
+      display: block;
+    }
+    .error-banner-header {
+      display: flex;
+      align-items: center;
+      gap: var(--wsc-system-spacer-rem-xs);
+      margin-bottom: var(--wsc-system-spacer-rem-xs);
+    }
+    .error-banner-header .material-icons {
+      color: var(--wsc-system-error);
+      font-size: 20px;
+    }
+    .error-banner-title {
+      font-size: var(--wsc-system-typography-body-1-font-size);
+      font-weight: var(--wsc-system-typography-body-1-font-weight);
+      color: var(--wsc-system-on-error-container);
+    }
+    .error-banner-list {
+      margin: 0;
+      padding-left: var(--wsc-system-spacer-rem-lg);
+      color: var(--wsc-system-on-error-container);
+    }
+    .error-banner-list li {
+      margin-bottom: var(--wsc-system-spacer-rem-2xs);
+      font-size: var(--wsc-system-typography-body-2-font-size);
+    }
+    .error-banner-link {
+      color: var(--wsc-system-on-error-container-variant, var(--wsc-system-error));
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .error-banner-link:hover {
+      text-decoration: none;
+    }
+
+    .form-label {
+      font-size: 12px;
+      color: var(--wsc-system-on-surface-variant);
+      margin-bottom: var(--wsc-system-spacer-rem-2xs);
+      display: block;
+      font-weight: 500;
+    }
+
+    .form-label .required {
+      color: var(--wsc-system-error);
+      margin-left: 1px;
+    }
+
+    .form-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 2px 0;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--wsc-system-on-surface);
+      outline: none;
+    }
+
+    .form-select {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 2px 24px 2px 0;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--wsc-system-on-surface);
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%235f727e'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0 center;
+    }
+
+    /* ═══ STICKY FOOTER ACTION BAR ═══ */
+    .form-footer {
+      position: fixed;
+      bottom: 0;
+      left: var(--wcts-sidebar-width);
+      right: 0;
+      background: var(--wsc-system-surface);
+      border-top: 1px solid var(--wsc-system-outline);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--wsc-system-spacer-rem-sm);
+      padding: var(--wsc-system-spacer-rem-sm) var(--wsc-system-spacer-rem-xl);
+      z-index: 50;
+      transition: left var(--wsc-transition-normal);
+    }
+
+    /* ═══ HAMBURGER BUTTON (mobile only) ═══ */
+    .topnav-hamburger {
+      background: none;
+      border: none;
+      color: var(--wsc-system-icon-default);
+      cursor: pointer;
+      padding: var(--wsc-system-spacer-rem-2xs);
+      border-radius: var(--wsc-border-radius-full);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      margin-right: var(--wsc-system-spacer-rem-xs);
+      transition: background var(--wsc-transition-fast);
+    }
+
+    .topnav-hamburger:hover { background: var(--wsc-system-surface-container); }
+    .topnav-hamburger .material-icons { font-size: 24px; }
+
+    /* ═══ SCRIM OVERLAY ═══ */
+    .scrim-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--wsc-system-scrim);
+      opacity: 0;
+      z-index: 149;
+      transition: opacity var(--wsc-transition-normal);
+    }
+
+    /* ═══ PROTOTYPE BANNER ═══ */
+    .prototype-banner {
+      background: var(--wsc-system-warning-container);
+      color: var(--wsc-system-on-warning-container);
+      text-align: center;
+      padding: var(--wsc-system-spacer-rem-2xs) var(--wsc-system-spacer-rem-md);
+      font-size: var(--wsc-system-typography-caption-font-size);
+      font-weight: var(--wsc-system-typography-caption-font-weight);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+    }
+
+    /* ═══ Responsive ═══ */
+
+    /* Tablet: 640–1023px */
+    @media (max-width: 1023px) {
+      .sidebar {
+        width: var(--wcts-sidebar-collapsed-width);
+      }
+
+      .sidebar-item-label {
+        display: none;
+      }
+
+      .sidebar-collapse {
+        justify-content: center;
+        padding: var(--wsc-system-spacer-rem-sm) 0;
+      }
+
+      .sidebar-collapse .material-icons {
+        transform: rotate(180deg);
+      }
+
+      .sidebar-item {
+        justify-content: center;
+        padding: var(--wsc-system-spacer-rem-sm) 0;
+      }
+
+      .topnav-links {
+        display: none;
+      }
+
+      .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .form-footer {
+        left: var(--wcts-sidebar-collapsed-width);
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--wsc-system-spacer-rem-xs);
+        padding: var(--wsc-system-spacer-rem-sm) var(--wsc-system-spacer-rem-md);
+        justify-content: flex-start;
+      }
+
+      .form-footer .btn-primary {
+        order: 1;
+      }
+
+      .form-footer .btn-outlined {
+        order: 2;
+      }
+
+      .form-footer .btn-primary,
+      .form-footer .btn-outlined {
+        width: 100%;
+        min-height: 44px;
+        justify-content: center;
+      }
+    }
+
+    /* Mobile: below 640px */
+    @media (max-width: 639px) {
+      .topnav-hamburger {
+        display: flex;
+      }
+
+      .topnav {
+        padding: 0 var(--wsc-system-spacer-rem-sm);
+      }
+
+      .sidebar {
+        position: fixed;
+        top: calc(var(--wcts-topnav-height) + 22px);
+        left: 0;
+        bottom: 0;
+        width: var(--wcts-sidebar-width);
+        z-index: 150;
+        transform: translateX(-100%);
+        transition: transform var(--wsc-transition-normal);
+      }
+
+      body.sidebar-open .sidebar {
+        transform: translateX(0);
+      }
+
+      body.sidebar-open .sidebar-item-label,
+      .sidebar-item-label {
+        display: inline;
+      }
+
+      .sidebar-item {
+        justify-content: flex-start;
+        padding: var(--wsc-system-spacer-rem-sm) var(--wsc-system-spacer-rem-md);
+      }
+
+      .sidebar-collapse {
+        display: flex;
+      }
+
+      body.sidebar-open .scrim-overlay {
+        display: block;
+        opacity: 0.32;
+      }
+
+      .content-area {
+        padding: var(--wsc-system-spacer-rem-md);
+        padding-bottom: 80px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: var(--wsc-system-spacer-rem-sm) var(--wsc-system-spacer-rem-md);
+      }
+
+      .form-group.full-width,
+      .form-group.span-2 {
+        grid-column: span 1;
+      }
+
+      .card-body {
+        padding: 0 var(--wsc-system-spacer-rem-md) var(--wsc-system-spacer-rem-md);
+      }
+
+      .card-header {
+        padding: var(--wsc-system-spacer-rem-md);
+      }
+
+      .page-header {
+        margin-bottom: var(--wsc-system-spacer-rem-md);
+        flex-wrap: wrap;
+      }
+
+      .form-footer {
+        left: 0;
+      }
+
+      .prototype-banner {
+        font-size: 9px;
+        padding: 2px var(--wsc-system-spacer-rem-2xs);
+        white-space: nowrap;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="prototype-banner">Prototype only — Adapt to your repo's patterns, rules, and design system before implementation</div>
+
+  <!-- ═══ TOP NAV BAR ═══ -->
+  <nav class="topnav">
+    <div class="topnav-left">
+      <button class="topnav-hamburger" onclick="toggleDrawer()" title="Menu">
+        <span class="material-icons">menu</span>
+      </button>
+      <div class="topnav-logo">
+        <svg width="56" height="28" viewBox="0 0 56 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M38.33 10.74L28.24 0.650009C28.197 0.604303 28.1451 0.56788 28.0875 0.542984C28.0299 0.518088 27.9678 0.505249 27.905 0.505249C27.8422 0.505249 27.7801 0.518088 27.7225 0.542984C27.6649 0.56788 27.613 0.604303 27.57 0.650009L12 16.24L21.45 18.84L38.33 10.74Z" fill="#71B0B4"/>
+          <path d="M45.3496 7.39L38.3496 10.74L55.7496 28.24L45.9696 7.60999C45.9156 7.49949 45.8204 7.41456 45.7045 7.37343C45.5886 7.3323 45.4612 7.33825 45.3496 7.39Z" fill="#D38235"/>
+          <path d="M21.4497 18.81L38.3297 10.74L55.7497 28.23L21.4497 18.81Z" fill="#A9431E"/>
+          <path d="M55.75 28.24H0L7.5 15.46C7.5611 15.3298 7.66995 15.2281 7.80399 15.176C7.93803 15.1238 8.08699 15.1253 8.22 15.18L55.75 28.24Z" fill="#253746"/>
+        </svg>
+        <span style="font-size: 14px; font-weight: 600; color: var(--wsc-system-secondary); margin-left: var(--wsc-system-spacer-rem-xs);">WellSky</span>
+      </div>
+    </div>
+    <div class="topnav-right">
+      <div class="topnav-links">
+        <a class="topnav-link" href="#">Patients</a>
+        <a class="topnav-link" href="#">Orders</a>
+        <a class="topnav-link active" href="#">Payers</a>
+        <a class="topnav-link" href="#">Reports</a>
+      </div>
+      <button class="topnav-icon-btn" title="Notifications"><span class="material-icons">notifications</span></button>
+      <button class="topnav-icon-btn" title="Search"><span class="material-icons">search</span></button>
+      <button class="topnav-icon-btn" title="Account"><span class="material-icons">account_circle</span></button>
+      <button class="topnav-icon-btn" title="More"><span class="material-icons">more_vert</span></button>
+    </div>
+  </nav>
+
+  <!-- ═══ SCRIM (mobile drawer backdrop) ═══ -->
+  <div class="scrim-overlay" onclick="closeDrawer()"></div>
+
+  <!-- ═══ APP BODY ═══ -->
+  <div class="app-body">
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+        <a class="sidebar-item" href="#">
+          <span class="material-icons">dashboard</span>
+          <span class="sidebar-item-label">Dashboard</span>
+        </a>
+        <a class="sidebar-item" href="#">
+          <span class="material-icons">people</span>
+          <span class="sidebar-item-label">Patients</span>
+        </a>
+        <a class="sidebar-item" href="#">
+          <span class="material-icons">assignment</span>
+          <span class="sidebar-item-label">Orders</span>
+        </a>
+        <a class="sidebar-item active" href="#">
+          <span class="material-icons">account_balance</span>
+          <span class="sidebar-item-label">Payers</span>
+        </a>
+        <a class="sidebar-item" href="#">
+          <span class="material-icons">analytics</span>
+          <span class="sidebar-item-label">Reports</span>
+        </a>
+        <a class="sidebar-item" href="#">
+          <span class="material-icons">settings</span>
+          <span class="sidebar-item-label">Administration</span>
+        </a>
+      </nav>
+      <div class="sidebar-collapse" onclick="toggleSidebar()">
+        <span class="material-icons" id="collapse-icon">keyboard_double_arrow_left</span>
+        <span class="sidebar-item-label" id="collapse-label">Collapse</span>
+      </div>
+    </aside>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main class="main-content" id="main-content">
+      <div class="content-area">
+
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumb">
+          <a href="#">Home</a>
+          <span class="separator">&#8250;</span>
+          <a href="#">Payers</a>
+          <span class="separator">&#8250;</span>
+          <span class="current">Create New Payer</span>
+        </nav>
+
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1 class="page-title">Create New Payer</h1>
+        </div>
+        <p class="page-help-text">Required fields are marked with an asterisk (*)</p>
+
+        <!-- Error Banner -->
+        <div class="error-banner" id="error-banner">
+          <div class="error-banner-header">
+            <span class="material-icons">warning</span>
+            <span class="error-banner-title">There is a problem. Review your information and try again.</span>
+          </div>
+          <ul class="error-banner-list" id="error-list">
+            <!-- Error messages will be inserted here -->
+          </ul>
+        </div>
+
+        <!-- ═══ SECTION 1: Payer Information ═══ -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Payer Information</h2>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <!-- Row 1: Payer Name, Payer Identifier, Payer Type, Qualifier -->
+              <div class="form-group">
+                <div class="mat-field" data-field="payerName">
+                  <label class="form-label" for="payerName">Payer Name <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="payerName" placeholder=" " required aria-required="true" data-field-name="Payer Name">
+                </div>
+                <div class="field-error" id="payerName-error" data-error="payerName"></div>
+              </div>
+              <div class="form-group">
+                <div class="mat-field">
+                  <label class="form-label">Payer Identifier</label>
+                  <input type="text" class="form-input" placeholder=" ">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="mat-field" data-field="payerType">
+                  <label class="form-label" for="payerType">Payer Type <span class="required">*</span></label>
+                  <select class="form-select" id="payerType" required aria-required="true" data-field-name="Payer Type">
+                    <option value="">Select payer type</option>
+                    <option>Medicare</option>
+                    <option>Medicaid</option>
+                    <option>Commercial</option>
+                    <option>Managed Care</option>
+                    <option>Workers' Compensation</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="field-error" id="payerType-error" data-error="payerType"></div>
+              </div>
+              <div class="form-group">
+                <div class="mat-field">
+                  <label class="form-label">Qualifier</label>
+                  <input type="text" class="form-input" placeholder=" ">
+                </div>
+              </div>
+
+              <!-- Row 2: Organization Name, Payer ID No, NAIC No, Provider Number -->
+              <div class="form-group">
+                <div class="mat-field">
+                  <label class="form-label">Organization Name</label>
+                  <input type="text" class="form-input" placeholder=" ">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="mat-field">
+                  <label class="form-label">Payer ID No</label>
+                  <input type="text" class="form-input" placeholder=" ">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="mat-field">
+                  <label class="form-label">NAIC No</label>
+                  <input type="text" class="form-input" placeholder=" ">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="mat-field">
+                  <label class="form-label">Provider Number</label>
+                  <input type="text" class="form-input" placeholder=" ">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ SECTION 2: Primary Contact ═══ -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Primary Contact</h2>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-group span-2">
+                <div class="mat-field" data-field="primaryPhone">
+                  <label class="form-label" for="primaryPhone">Primary Phone <span class="required">*</span></label>
+                  <input type="tel" class="form-input" id="primaryPhone" placeholder=" " required aria-required="true" data-field-name="Primary Phone">
+                </div>
+                <div class="field-error" id="primaryPhone-error" data-error="primaryPhone"></div>
+              </div>
+              <div class="form-group span-2">
+                <div class="mat-field" data-field="phoneType">
+                  <label class="form-label" for="phoneType">Phone Type <span class="required">*</span></label>
+                  <select class="form-select" id="phoneType" required aria-required="true" data-field-name="Phone Type">
+                    <option value="">-- Select Type --</option>
+                    <optgroup label="Organizational">
+                      <option>Main Line</option>
+                      <option>Billing Department</option>
+                      <option>Claims Department</option>
+                      <option>Customer Service</option>
+                    </optgroup>
+                    <optgroup label="Individual">
+                      <option>Mobile</option>
+                      <option>Work</option>
+                      <option>Home</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="field-error" id="phoneType-error" data-error="phoneType"></div>
+              </div>
+              <div class="form-group full-width">
+                <div class="mat-field" data-field="emailAddress">
+                  <label class="form-label" for="emailAddress">Email Address <span class="required">*</span></label>
+                  <input type="email" class="form-input" id="emailAddress" placeholder=" " required aria-required="true" data-field-name="Email Address">
+                </div>
+                <div class="field-error" id="emailAddress-error" data-error="emailAddress"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ SECTION 3: Primary Address ═══ -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Primary Address</h2>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <!-- Row 1: Address Line 1 -->
+              <div class="form-group full-width">
+                <div class="mat-field" data-field="addressLine1">
+                  <label class="form-label" for="addressLine1">Address Line 1 <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="addressLine1" placeholder=" " required aria-required="true" data-field-name="Address Line 1">
+                </div>
+                <div class="field-error" id="addressLine1-error" data-error="addressLine1"></div>
+              </div>
+
+              <!-- Row 2: Address Line 2 -->
+              <div class="form-group full-width">
+                <div class="mat-field">
+                  <label class="form-label">Address Line 2</label>
+                  <input type="text" class="form-input" placeholder=" ">
+                </div>
+              </div>
+
+              <!-- Row 3: City, State, Zip Code -->
+              <div class="form-group span-2">
+                <div class="mat-field" data-field="city">
+                  <label class="form-label" for="city">City <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="city" placeholder=" " required aria-required="true" data-field-name="City">
+                </div>
+                <div class="field-error" id="city-error" data-error="city"></div>
+              </div>
+              <div class="form-group">
+                <div class="mat-field" data-field="state">
+                  <label class="form-label" for="state">State <span class="required">*</span></label>
+                  <select class="form-select" id="state" required aria-required="true" data-field-name="State">
+                    <option value="">Select state</option>
+                    <option>Alabama</option>
+                    <option>Alaska</option>
+                    <option>Arizona</option>
+                    <option>Arkansas</option>
+                    <option>California</option>
+                    <option>Colorado</option>
+                    <option>Connecticut</option>
+                    <option>Delaware</option>
+                    <option>Florida</option>
+                    <option>Georgia</option>
+                    <option>Hawaii</option>
+                    <option>Idaho</option>
+                    <option>Illinois</option>
+                    <option>Indiana</option>
+                    <option>Iowa</option>
+                    <option>Kansas</option>
+                    <option>Kentucky</option>
+                    <option>Louisiana</option>
+                    <option>Maine</option>
+                    <option>Maryland</option>
+                    <option>Massachusetts</option>
+                    <option>Michigan</option>
+                    <option>Minnesota</option>
+                    <option>Mississippi</option>
+                    <option>Missouri</option>
+                    <option>Montana</option>
+                    <option>Nebraska</option>
+                    <option>Nevada</option>
+                    <option>New Hampshire</option>
+                    <option>New Jersey</option>
+                    <option>New Mexico</option>
+                    <option>New York</option>
+                    <option>North Carolina</option>
+                    <option>North Dakota</option>
+                    <option>Ohio</option>
+                    <option>Oklahoma</option>
+                    <option>Oregon</option>
+                    <option>Pennsylvania</option>
+                    <option>Rhode Island</option>
+                    <option>South Carolina</option>
+                    <option>South Dakota</option>
+                    <option>Tennessee</option>
+                    <option>Texas</option>
+                    <option>Utah</option>
+                    <option>Vermont</option>
+                    <option>Virginia</option>
+                    <option>Washington</option>
+                    <option>West Virginia</option>
+                    <option>Wisconsin</option>
+                    <option>Wyoming</option>
+                  </select>
+                </div>
+                <div class="field-error" id="state-error" data-error="state"></div>
+              </div>
+              <div class="form-group">
+                <div class="mat-field" data-field="zipCode">
+                  <label class="form-label" for="zipCode">Zip Code <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="zipCode" placeholder=" " pattern="[0-9]{5}(-[0-9]{4})?" required aria-required="true" data-field-name="Zip Code">
+                </div>
+                <div class="field-error" id="zipCode-error" data-error="zipCode"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══ STICKY FOOTER ACTION BAR ═══ -->
+      <div class="form-footer" id="form-footer">
+        <button class="btn-outlined" type="button" onclick="handleCancel()">CANCEL</button>
+        <button class="btn-primary" type="button" onclick="handleSave()">SAVE</button>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const icon = document.getElementById('collapse-icon');
+      const label = document.getElementById('collapse-label');
+      const footer = document.getElementById('form-footer');
+      sidebar.classList.toggle('collapsed');
+      if (sidebar.classList.contains('collapsed')) {
+        icon.textContent = 'keyboard_double_arrow_right';
+        label.style.display = 'none';
+        document.querySelectorAll('.sidebar-item-label').forEach(l => l.style.display = 'none');
+        footer.style.left = 'var(--wcts-sidebar-collapsed-width)';
+      } else {
+        icon.textContent = 'keyboard_double_arrow_left';
+        label.style.display = '';
+        document.querySelectorAll('.sidebar-item-label').forEach(l => l.style.display = '');
+        footer.style.left = 'var(--wcts-sidebar-width)';
+      }
+    }
+
+    /* ═══ Mobile drawer toggle ═══ */
+    function toggleDrawer() {
+      document.body.classList.toggle('sidebar-open');
+    }
+
+    function closeDrawer() {
+      document.body.classList.remove('sidebar-open');
+    }
+
+    /* Clean up sidebar-open class when resizing past mobile breakpoint */
+    window.addEventListener('resize', function () {
+      if (window.innerWidth >= 640) {
+        document.body.classList.remove('sidebar-open');
+      }
+    });
+
+    /* ═══ Form Validation ═══ */
+
+    // Validation rules
+    const validationRules = {
+      payerName: {
+        required: true,
+        message: 'Payer Name is required'
+      },
+      payerType: {
+        required: true,
+        message: 'Payer Type is required'
+      },
+      primaryPhone: {
+        required: true,
+        pattern: /^[\d\s\-\(\)\.]+$/,
+        minLength: 10,
+        message: 'Primary Phone is required',
+        patternMessage: 'Primary Phone must be 10 digits (e.g., 555-123-4567)'
+      },
+      phoneType: {
+        required: true,
+        message: 'Phone Type is required'
+      },
+      emailAddress: {
+        required: true,
+        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        message: 'Email Address is required',
+        patternMessage: 'Email Address must be valid (e.g., user@example.com)'
+      },
+      addressLine1: {
+        required: true,
+        message: 'Address Line 1 is required'
+      },
+      city: {
+        required: true,
+        message: 'City is required'
+      },
+      state: {
+        required: true,
+        message: 'State is required'
+      },
+      zipCode: {
+        required: true,
+        pattern: /^[0-9]{5}(-[0-9]{4})?$/,
+        message: 'Zip Code is required',
+        patternMessage: 'Zip Code must be 5 digits (e.g., 12345 or 12345-6789)'
+      }
+    };
+
+    // Validate a single field
+    function validateField(fieldName) {
+      const rule = validationRules[fieldName];
+      if (!rule) return true;
+
+      const matField = document.querySelector(`[data-field="${fieldName}"]`);
+      const input = matField.querySelector('.form-input, .form-select');
+      const errorEl = document.querySelector(`[data-error="${fieldName}"]`);
+      const value = input.value.trim();
+
+      // Clear previous error
+      matField.classList.remove('error');
+      errorEl.classList.remove('visible');
+      errorEl.textContent = '';
+      input.removeAttribute('aria-invalid');
+      input.removeAttribute('aria-describedby');
+
+      // Check required
+      if (rule.required && !value) {
+        matField.classList.add('error');
+        errorEl.textContent = rule.message;
+        errorEl.classList.add('visible');
+        input.setAttribute('aria-invalid', 'true');
+        input.setAttribute('aria-describedby', errorEl.id);
+        return false;
+      }
+
+      // Check minLength
+      if (value && rule.minLength) {
+        const digitsOnly = value.replace(/\D/g, '');
+        if (digitsOnly.length < rule.minLength) {
+          matField.classList.add('error');
+          errorEl.textContent = rule.patternMessage || rule.message;
+          errorEl.classList.add('visible');
+          input.setAttribute('aria-invalid', 'true');
+          input.setAttribute('aria-describedby', errorEl.id);
+          return false;
+        }
+      }
+
+      // Check pattern
+      if (value && rule.pattern && !rule.pattern.test(value)) {
+        matField.classList.add('error');
+        errorEl.textContent = rule.patternMessage || rule.message;
+        errorEl.classList.add('visible');
+        input.setAttribute('aria-invalid', 'true');
+        input.setAttribute('aria-describedby', errorEl.id);
+        return false;
+      }
+
+      return true;
+    }
+
+    // Validate entire form
+    function validateForm() {
+      const errors = [];
+      let isValid = true;
+
+      Object.keys(validationRules).forEach(fieldName => {
+        const fieldValid = validateField(fieldName);
+        if (!fieldValid) {
+          isValid = false;
+          const rule = validationRules[fieldName];
+          const matField = document.querySelector(`[data-field="${fieldName}"]`);
+          const input = matField.querySelector('.form-input, .form-select');
+          const value = input.value.trim();
+
+          // Determine error message
+          let errorMsg = rule.message;
+
+          // Check minLength first (for phone)
+          if (value && rule.minLength) {
+            const digitsOnly = value.replace(/\D/g, '');
+            if (digitsOnly.length < rule.minLength) {
+              errorMsg = rule.patternMessage || rule.message;
+            }
+          }
+          // Then check pattern
+          else if (value && rule.pattern && !rule.pattern.test(value)) {
+            errorMsg = rule.patternMessage || rule.message;
+          }
+
+          errors.push({
+            fieldName: fieldName,
+            message: errorMsg
+          });
+        }
+      });
+
+      // Update error banner
+      const errorBanner = document.getElementById('error-banner');
+      const errorList = document.getElementById('error-list');
+
+      if (errors.length > 0) {
+        errorList.innerHTML = errors.map(err =>
+          `<li><a class="error-banner-link" data-field-link="${err.fieldName}">${err.message}</a></li>`
+        ).join('');
+
+        // Attach click handlers to error links
+        document.querySelectorAll('.error-banner-link').forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const fieldName = this.getAttribute('data-field-link');
+            const matField = document.querySelector(`[data-field="${fieldName}"]`);
+            const input = matField.querySelector('.form-input, .form-select');
+
+            // Scroll to field
+            matField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Focus input after scroll completes
+            setTimeout(() => {
+              input.focus();
+            }, 500);
+          });
+        });
+
+        errorBanner.classList.add('visible');
+        // Scroll to error banner
+        errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        errorBanner.classList.remove('visible');
+      }
+
+      return isValid;
+    }
+
+    // Attach blur validation to required fields
+    document.addEventListener('DOMContentLoaded', function() {
+      Object.keys(validationRules).forEach(fieldName => {
+        const matField = document.querySelector(`[data-field="${fieldName}"]`);
+        if (matField) {
+          const input = matField.querySelector('.form-input, .form-select');
+          input.addEventListener('blur', function() {
+            validateField(fieldName);
+          });
+        }
+      });
+    });
+
+    /* Mock form handlers */
+    function handleCancel() {
+      if (confirm('Discard changes and return to payers list?')) {
+        window.location.href = '#';
+      }
+    }
+
+    function handleSave() {
+      // Validate entire form
+      const isValid = validateForm();
+
+      if (isValid) {
+        alert('Payer saved successfully! (Prototype only — no data was actually saved)');
+        // In a real implementation, this would submit the form data
+      }
+    }
+
+    /* Top nav link interactions */
+    document.querySelectorAll('.topnav-link').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.topnav-link').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    /* Sidebar nav interactions */
+    document.querySelectorAll('.sidebar-nav > .sidebar-item').forEach(item => {
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
