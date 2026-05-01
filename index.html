@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Validation Prototypes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #424242;
+      background: #eceff1;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 400;
+      color: #1b3647;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #5f727e;
+      margin-bottom: 32px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #081620;
+      margin-top: 32px;
+      margin-bottom: 16px;
+    }
+
+    .prototype-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .prototype-item {
+      margin-bottom: 24px;
+      padding: 20px;
+      background: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+    }
+
+    .prototype-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #228189;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .prototype-link:hover {
+      text-decoration: underline;
+    }
+
+    .prototype-description {
+      color: #5f727e;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+
+    .feature-list {
+      margin-top: 12px;
+      padding-left: 20px;
+    }
+
+    .feature-list li {
+      color: #424242;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #228189;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 24px;
+    }
+
+    .github-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Form Validation Prototypes</h1>
+    <p class="subtitle">Interactive HTML prototypes demonstrating form validation patterns with WellSky Atlas Design System</p>
+
+    <h2>Prototypes</h2>
+
+    <ul class="prototype-list">
+      <li class="prototype-item">
+        <a href="./full-page-example/index.html" class="prototype-link">
+          Full Page Example
+        </a>
+        <p class="prototype-description">
+          A complete payer creation form demonstrating comprehensive form validation patterns.
+        </p>
+        <ul class="feature-list">
+          <li>Required field validation on blur</li>
+          <li>Format validation with examples (email, phone, zip code)</li>
+          <li>Error banner with clickable error links that scroll to and focus fields</li>
+          <li>Accessible ARIA attributes (aria-required, aria-invalid, aria-describedby)</li>
+          <li>Material fill form fields with floating labels</li>
+          <li>WellSky Atlas Design System tokens</li>
+          <li>Fully responsive (mobile, tablet, desktop)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <a href="https://github.com/kdaly-design/form-validation-prototypes" class="github-link">
+      View on GitHub →
+    </a>
+  </div>
+</body>
+</html>
